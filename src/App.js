@@ -1,26 +1,43 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {Formik, Form, Field} from 'formik';
+import * as yup from 'yup';
+import CustomSelect from './CustomSelect.js';
 
-function App() {
+export default function App() {
+
+  const options = [
+    {label: "Marcelo Camelo", value: "1"},
+    {label: "Rodrigo Amarante", value: "2"},
+    {label: "Rodrigo Barba", value: "3"},
+    {label: "Bruno Medina", value: "4"}
+  ]
+
+  const initialValues = {
+    name: ""
+  }
+
+  const validationSchema = yup.object().shape({
+    name: yup.object({
+      label: yup.string().required(),
+      value: yup.string().required("Name is a required field"),
+    })
+  });
+
+  function handleSubmit(values) {
+      alert(JSON.stringify(values));
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <div className="form-container">
+        <Formik onSubmit={handleSubmit} initialValues={initialValues} validationSchema={validationSchema}>
+          <Form>
+            <CustomSelect name="name" options={options} />
+            <Field type="submit" className="btn" value="Send"/>
+          </Form>
+        </Formik>
+      </div>
     </div>
-  );
+  )
 }
-
-export default App;
